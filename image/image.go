@@ -9,9 +9,8 @@ import (
 	"image/png"
 	"io"
 
-	"golang.org/x/image/bmp"
-
 	"github.com/Fahrradflucht/last-supper/label"
+	"golang.org/x/image/bmp"
 )
 
 // New creates a new image and encodes it in the given format
