@@ -7,10 +7,9 @@ import (
 	"io/ioutil"
 	"log"
 
-	"golang.org/x/image/math/fixed"
-
 	"github.com/golang/freetype"
 	"github.com/golang/freetype/truetype"
+	"golang.org/x/image/math/fixed"
 )
 
 var (
