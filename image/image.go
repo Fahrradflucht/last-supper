@@ -15,10 +15,10 @@ import (
 )
 
 // New creates a new image and encodes it in the given format
-func New(width int, height int, bgcol color.RGBA, label label.ImageLabel) image.Image {
+func New(width int, height int, bgcol color.RGBA, l label.ImageLabel) image.Image {
 	img := image.NewRGBA(image.Rect(0, 0, width, height))
 	draw.Draw(img, img.Bounds(), &image.Uniform{bgcol}, image.ZP, draw.Src)
-	// label.Draw(img, label)
+	label.Draw(img, l)
 	return img
 }
 
