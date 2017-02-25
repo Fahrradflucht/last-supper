@@ -4,7 +4,6 @@ import (
 	"image"
 	"image/color"
 	"image/draw"
-	"io/ioutil"
 	"log"
 
 	"github.com/golang/freetype"
@@ -20,19 +19,18 @@ var (
 type ImageLabel struct {
 	Text        string
 	Color       color.RGBA
+	FontBytes   []byte
 	MaxFontsize float64
 }
 
 // Draw draws the given label in the biggest possible
 // way to the given image.
 func Draw(img *image.RGBA, label ImageLabel) {
-	// Read the font data. (This should probably happen in main)
-	fontBytes, err := ioutil.ReadFile("./Roboto-Regular.ttf")
-	if err != nil {
-		log.Println(err)
-		return
+	if label.FontBytes == nil {
+		label.FontBytes = defaultFontBytes()
 	}
-	f, err := freetype.ParseFont(fontBytes)
+
+	f, err := freetype.ParseFont(label.FontBytes)
 	if err != nil {
 		log.Println(err)
 		return
