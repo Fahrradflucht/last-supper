@@ -37,9 +37,12 @@ func main() {
 			vars := mux.Vars(r)
 
 			// Save since the regex guards against non-numeral chars
-			// TODO: Limit max size
 			width, _ := strconv.Atoi(vars["width"])
 			height, _ := strconv.Atoi(vars["height"])
+			if width > 5000 || height > 5000 {
+				http.Error(w, "Height and width must be between 0 and 5000px.", 500)
+				return
+			}
 
 			bgcolor, err := hex2rgba.Convert(vars["backcolor"], 255)
 			if err != nil {
