@@ -32,7 +32,7 @@ func main() {
 	r := mux.NewRouter()
 
 	r.HandleFunc(
-		"/{width:[0-9]+}x{height:[0-9]+}/{backcolor}/{textcolor}/{text}.{format}",
+		"/{width:[0-9]+}x{height:[0-9]+}/{backcolor}/{textcolor}/{text}.{format:jpg|jpeg|png|gif|bmp}",
 		func(w http.ResponseWriter, r *http.Request) {
 			vars := mux.Vars(r)
 
