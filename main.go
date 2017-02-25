@@ -1,6 +1,8 @@
 package main
 
 import (
+	"flag"
+	"fmt"
 	"log"
 	"net/http"
 	"strconv"
@@ -12,6 +14,9 @@ import (
 )
 
 func main() {
+	port := flag.Int("port", 8080, "Port on which to run the server.")
+	flag.Parse()
+
 	r := mux.NewRouter()
 
 	r.HandleFunc(
@@ -45,6 +50,6 @@ func main() {
 
 	http.Handle("/", r)
 
-	log.Println("Listening on port 8080...")
-	log.Fatal(http.ListenAndServe(":8080", nil))
+	log.Printf("Listening on port %d...", *port)
+	log.Fatal(http.ListenAndServe(fmt.Sprintf(":%d", *port), nil))
 }
