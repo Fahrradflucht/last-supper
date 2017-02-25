@@ -43,7 +43,7 @@ func Draw(img *image.RGBA, label ImageLabel) {
 
 	label.MaxFontsize = float64(imgBounds.Dy())
 
-	textImage := textBox(label, f)
+	textImage := textBox(label, f, imgBounds.Dx())
 	textImageBounds := textImage.Bounds()
 	w, h := textImageBounds.Dx(), textImageBounds.Dy()
 	x := imgBounds.Dx()/2 - w/2
@@ -51,10 +51,14 @@ func Draw(img *image.RGBA, label ImageLabel) {
 	draw.DrawMask(img, image.Rect(x, y, x+w, y+h), image.NewUniform(label.Color), image.ZP, textImage, textImageBounds.Min, draw.Over)
 }
 
-func textBox(label ImageLabel, f *truetype.Font) image.Image {
+func textBox(label ImageLabel, f *truetype.Font, maxWidth int) image.Image {
 	bg := image.NewUniform(color.Alpha{0})
 	fg := image.NewUniform(label.Color)
-	width := textLen(label.Text, f, label.MaxFontsize)
+	width := textWidth(label.Text, f, label.MaxFontsize)
+	for width > maxWidth {
+		label.MaxFontsize *= 0.9
+		width = textWidth(label.Text, f, label.MaxFontsize)
+	}
 	c := freetype.NewContext()
 	c.SetDPI(dpi)
 	c.SetFont(f)
@@ -78,7 +82,7 @@ func textBox(label ImageLabel, f *truetype.Font) image.Image {
 	return canvas.SubImage(image.Rect(0, 0, int(extent.X)>>6, height))
 }
 
-func textLen(s string, f *truetype.Font, fontsize float64) int {
+func textWidth(s string, f *truetype.Font, fontsize float64) int {
 	c := freetype.NewContext()
 	c.SetDPI(dpi)
 	c.SetFont(f)
