@@ -3,6 +3,7 @@ package main
 import (
 	"flag"
 	"fmt"
+	"io/ioutil"
 	"log"
 	"net/http"
 	"strconv"
@@ -15,7 +16,17 @@ import (
 
 func main() {
 	port := flag.Int("port", 8080, "Port on which to run the server.")
+	fontPath := flag.String("font", "", "Path to a ttf file to be used as image font")
 	flag.Parse()
+
+	var fontBytes []byte
+	if *fontPath != "" {
+		var err error
+		fontBytes, err = ioutil.ReadFile(*fontPath)
+		if err != nil {
+			log.Fatal(err)
+		}
+	}
 
 	r := mux.NewRouter()
 
@@ -42,8 +53,9 @@ func main() {
 			}
 
 			img := image.New(width, height, bgcolor, label.ImageLabel{
-				Text:  vars["text"],
-				Color: textcolor})
+				Text:      vars["text"],
+				Color:     textcolor,
+				FontBytes: fontBytes})
 
 			image.Encode(w, img, vars["format"])
 		})
