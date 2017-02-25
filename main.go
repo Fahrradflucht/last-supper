@@ -11,6 +11,7 @@ import (
 	"github.com/Fahrradflucht/last-supper/hex2rgba"
 	"github.com/Fahrradflucht/last-supper/image"
 	"github.com/Fahrradflucht/last-supper/label"
+	"github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
 )
 
@@ -60,7 +61,8 @@ func main() {
 			image.Encode(w, img, vars["format"])
 		})
 
-	http.Handle("/", r)
+	h := handlers.CompressHandler(r)
+	http.Handle("/", h)
 
 	log.Printf("Listening on port %d...", *port)
 	log.Fatal(http.ListenAndServe(fmt.Sprintf(":%d", *port), nil))
